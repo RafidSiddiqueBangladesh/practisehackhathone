@@ -1,0 +1,11 @@
+services:
+  express-api:
+    container_name: express-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
