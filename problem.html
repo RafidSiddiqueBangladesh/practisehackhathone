@@ -1,0 +1,1360 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hack The AI - Mock Preli Problems</title>
+    <style>
+      * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .problems-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .problem-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .method-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .method-post { background: #dcfce7; color: #166534; }
+        .method-get { background: #dbeafe; color: #1e40af; }
+        .method-put { background: #fef3c7; color: #92400e; }
+        .method-delete { background: #fecaca; color: #dc2626; }
+
+        .problem-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .problem-description {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+
+        .endpoint-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .endpoint-url {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #5a67d8;
+        }
+
+        .copy-btn.copied {
+            background: #10b981;
+        }
+
+        .collapsible-section {
+            margin-bottom: 1rem;
+        }
+
+        .collapsible-header {
+            background: #f1f5f9;
+            border: none;
+            width: 100%;
+            padding: 1rem;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .collapsible-header:hover {
+            background: #e2e8f0;
+        }
+
+        .collapsible-content {
+            display: none;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .collapsible-content.active {
+            display: block;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .code-block .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .code-block .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .status-code {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-200 { background: #dcfce7; color: #166534; }
+        .status-400 { background: #fecaca; color: #dc2626; }
+        .status-404 { background: #fed7aa; color: #ea580c; }
+
+        /* JSON Syntax Highlighting */
+        .json-key { color: #60a5fa; }
+        .json-string { color: #34d399; }
+        .json-number { color: #fbbf24; }
+        .json-boolean { color: #f472b6; }
+        .json-null { color: #9ca3af; }
+
+        .chevron {
+            transition: transform 0.2s;
+        }
+
+        .chevron.rotated {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .problem-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Hack The AI - Mock Preli Problems</h1>
+      </div>
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search problems..." id="searchInput">
+      </div>
+      <div class="problems-grid" id="problemsGrid">
+        <!-- Problem 1: Create Member -->
+        <div class="problem-card" data-search="create member post api members">
+          <div class="problem-header">
+            <span class="problem-number">Q1</span>
+            <span class="method-badge method-post">POST</span>
+            <h2 class="problem-title">Create Member</h2>
+          </div>
+          <p class="problem-description">Register a new library member with unique ID, name, and age validation.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>POST /api/members</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/members', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Request Body
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="request-q1">{
+  "member_id": 1,
+  "name": "Alice",
+  "age": 22
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q1">{
+  "member_id": 1,
+  "name": "Alice",
+  "age": 22,
+  "has_borrowed": false
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-400">400 Bad Request</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q1">{
+  "message": "member with id: 1 already exists"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 2: Get Member Info -->
+        <div class="problem-card" data-search="get member info api members">
+          <div class="problem-header">
+            <span class="problem-number">Q2</span>
+            <span class="method-badge method-get">GET</span>
+            <h2 class="problem-title">Get Member Info</h2>
+          </div>
+          <p class="problem-description">Retrieve detailed information about a specific library member by ID.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>GET /api/members/{member_id}</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/members/{member_id}', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q2">{
+  "member_id": 1,
+  "name": "Alice",
+  "age": 22,
+  "has_borrowed": false
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-404">404 Not Found</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q2">{
+  "message": "member with id: 5 was not found"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 3: List All Members -->
+        <div class="problem-card" data-search="list all members get api members">
+          <div class="problem-header">
+            <span class="problem-number">Q3</span>
+            <span class="method-badge method-get">GET</span>
+            <h2 class="problem-title">List All Members</h2>
+          </div>
+          <p class="problem-description">Retrieve a complete list of all registered library members.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>GET /api/members</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/members', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q3">{
+  "members": [
+    {
+      "member_id": 1,
+      "name": "Alice",
+      "age": 22
+    },
+    {
+      "member_id": 2,
+      "name": "Bob",
+      "age": 30
+    }
+  ]
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 4: Update Member Info -->
+        <div class="problem-card" data-search="update member info put api members">
+          <div class="problem-header">
+            <span class="problem-number">Q4</span>
+            <span class="method-badge method-put">PUT</span>
+            <h2 class="problem-title">Update Member Info</h2>
+          </div>
+          <p class="problem-description">Update existing member information with age validation (minimum 12 years).</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>PUT /api/members/{member_id}</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/members/{member_id}', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Request Body
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="request-q4">{
+  "name": "Alice Smith",
+  "age": 25
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q4">{
+  "member_id": 1,
+  "name": "Alice Smith",
+  "age": 25,
+  "has_borrowed": false
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-400">400 Bad Request</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q4">{
+  "message": "invalid age: 10, must be 12 or older"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 5: Borrow Book -->
+        <div class="problem-card" data-search="borrow book post api borrow">
+          <div class="problem-header">
+            <span class="problem-number">Q5</span>
+            <span class="method-badge method-post">POST</span>
+            <h2 class="problem-title">Borrow Book</h2>
+          </div>
+          <p class="problem-description">Process book borrowing with validation to prevent multiple active borrows per member.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>POST /api/borrow</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/borrow', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Request Body
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="request-q5">{
+  "member_id": 1,
+  "book_id": 101
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q5">{
+  "transaction_id": 501,
+  "member_id": 1,
+  "book_id": 101,
+  "borrowed_at": "2025-09-11T10:30:00Z",
+  "status": "active"
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-400">400 Bad Request</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q5">{
+  "message": "member with id: 1 has already borrowed a book"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 6: Return Book -->
+        <div class="problem-card" data-search="return book post api return">
+          <div class="problem-header">
+            <span class="problem-number">Q6</span>
+            <span class="method-badge method-post">POST</span>
+            <h2 class="problem-title">Return Book</h2>
+          </div>
+          <p class="problem-description">Process book return and update borrowing status for a member.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>POST /api/return</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/return', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Request Body
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="request-q6">{
+  "member_id": 1,
+  "book_id": 101
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q6">{
+  "transaction_id": 501,
+  "member_id": 1,
+  "book_id": 101,
+  "returned_at": "2025-09-15T14:20:00Z",
+  "status": "returned"
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-400">400 Bad Request</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q6">{
+  "message": "member with id: 1 has not borrowed book with id: 101"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 7: List Borrowed Books -->
+        <div class="problem-card" data-search="list borrowed books get api borrowed">
+          <div class="problem-header">
+            <span class="problem-number">Q7</span>
+            <span class="method-badge method-get">GET</span>
+            <h2 class="problem-title">List Borrowed Books</h2>
+          </div>
+          <p class="problem-description">Get all currently borrowed books with member and book details.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>GET /api/borrowed</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/borrowed', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q7">{
+  "borrowed_books": [
+    {
+      "transaction_id": 501,
+      "member_id": 1,
+      "member_name": "Alice",
+      "book_id": 101,
+      "book_title": "The Great Gatsby",
+      "borrowed_at": "2025-09-11T10:30:00Z",
+      "due_date": "2025-09-25T10:30:00Z"
+    },
+    {
+      "transaction_id": 502,
+      "member_id": 2,
+      "member_name": "Bob",
+      "book_id": 102,
+      "book_title": "To Kill a Mockingbird",
+      "borrowed_at": "2025-09-12T14:15:00Z",
+      "due_date": "2025-09-26T14:15:00Z"
+    }
+  ]
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 8: Get Borrowing History -->
+        <div class="problem-card" data-search="borrowing history get api history">
+          <div class="problem-header">
+            <span class="problem-number">Q8</span>
+            <span class="method-badge method-get">GET</span>
+            <h2 class="problem-title">Get Borrowing History</h2>
+          </div>
+          <p class="problem-description">Retrieve complete borrowing history for a specific member including returned books.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>GET /api/members/{member_id}/history</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/members/{member_id}/history', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q8">{
+  "member_id": 1,
+  "member_name": "Alice",
+  "borrowing_history": [
+    {
+      "transaction_id": 501,
+      "book_id": 101,
+      "book_title": "The Great Gatsby",
+      "borrowed_at": "2025-09-11T10:30:00Z",
+      "returned_at": "2025-09-15T14:20:00Z",
+      "status": "returned"
+    },
+    {
+      "transaction_id": 503,
+      "book_id": 103,
+      "book_title": "1984",
+      "borrowed_at": "2025-09-16T09:45:00Z",
+      "returned_at": null,
+      "status": "active"
+    }
+  ]
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-404">404 Not Found</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q8">{
+  "message": "member with id: 5 was not found"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 9: Delete Member -->
+        <div class="problem-card" data-search="delete member delete api members">
+          <div class="problem-header">
+            <span class="problem-number">Q9</span>
+            <span class="method-badge method-delete">DELETE</span>
+            <h2 class="problem-title">Delete Member</h2>
+          </div>
+          <p class="problem-description">Remove a member from the library system with validation for active borrows.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>DELETE /api/members/{member_id}</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/members/{member_id}', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q9">{
+  "message": "member with id: 1 has been deleted successfully"
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-400">400 Bad Request</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q9">{
+  "message": "cannot delete member with id: 1, member has an active book borrowing"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 10: Get Overdue Books -->
+        <div class="problem-card" data-search="overdue books get api overdue">
+          <div class="problem-header">
+            <span class="problem-number">Q10</span>
+            <span class="method-badge method-get">GET</span>
+            <h2 class="problem-title">Get Overdue Books</h2>
+          </div>
+          <p class="problem-description">Retrieve all books that are past their due date with member and book information.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>GET /api/overdue</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/overdue', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q10">{
+  "overdue_books": [
+    {
+      "transaction_id": 504,
+      "member_id": 3,
+      "member_name": "Charlie",
+      "book_id": 104,
+      "book_title": "Pride and Prejudice",
+      "borrowed_at": "2025-08-20T11:00:00Z",
+      "due_date": "2025-09-03T11:00:00Z",
+      "days_overdue": 8
+    },
+    {
+      "transaction_id": 505,
+      "member_id": 4,
+      "member_name": "Diana",
+      "book_id": 105,
+      "book_title": "The Catcher in the Rye",
+      "borrowed_at": "2025-08-25T15:30:00Z",
+      "due_date": "2025-09-08T15:30:00Z",
+      "days_overdue": 3
+    }
+  ]
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 11: Add Book -->
+        <div class="problem-card" data-search="add book post api books">
+          <div class="problem-header">
+            <span class="problem-number">Q11</span>
+            <span class="method-badge method-post">POST</span>
+            <h2 class="problem-title">Add Book</h2>
+          </div>
+          <p class="problem-description">Add a new book to the library catalog with unique ID, title, author, and availability status.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>POST /api/books</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/books', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Request Body
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="request-q11">{
+  "book_id": 201,
+  "title": "The Hobbit",
+  "author": "J.R.R. Tolkien",
+  "isbn": "978-0547928227"
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q11">{
+  "book_id": 201,
+  "title": "The Hobbit",
+  "author": "J.R.R. Tolkien",
+  "isbn": "978-0547928227",
+  "is_available": true
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-400">400 Bad Request</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q11">{
+  "message": "book with id: 201 already exists"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 12: Get Book Info -->
+        <div class="problem-card" data-search="get book info api books">
+          <div class="problem-header">
+            <span class="problem-number">Q12</span>
+            <span class="method-badge method-get">GET</span>
+            <h2 class="problem-title">Get Book Info</h2>
+          </div>
+          <p class="problem-description">Retrieve detailed information about a specific book including availability status.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>GET /api/books/{book_id}</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/books/{book_id}', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q12">{
+  "book_id": 201,
+  "title": "The Hobbit",
+  "author": "J.R.R. Tolkien",
+  "isbn": "978-0547928227",
+  "is_available": true
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-404">404 Not Found</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q12">{
+  "message": "book with id: 999 was not found"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 13: Advanced Book Search with Complex Filtering -->
+        <div class="problem-card" data-search="advanced search complex filtering books analytics">
+          <div class="problem-header">
+            <span class="problem-number">Q13</span>
+            <span class="method-badge method-get">GET</span>
+            <h2 class="problem-title">Advanced Book Search with Complex Filtering</h2>
+          </div>
+          <p class="problem-description">Implement a sophisticated book search system with multiple filters, sorting options, pagination, and analytics. The system must handle complex queries with nested conditions, date ranges, popularity scoring, and cross-referencing with borrowing patterns. Include support for fuzzy text matching, category hierarchies, and real-time availability calculations based on borrowing history and member preferences.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>GET /api/books/search?q={query}&category={cat}&author={author}&published_after={date}&published_before={date}&min_rating={rating}&max_rating={rating}&availability={status}&sort_by={field}&sort_order={order}&page={num}&limit={num}&include_analytics={bool}&member_preferences={bool}&borrowing_trends={bool}</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/books/search', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Query Parameters
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="params-q13">Query Parameters:
+- q: Search query (supports fuzzy matching, synonyms, typos)
+- category: Book category (supports hierarchical categories)
+- author: Author name (partial matching, multiple authors)
+- published_after: ISO date (YYYY-MM-DD)
+- published_before: ISO date (YYYY-MM-DD)
+- min_rating: Float (0.0-5.0)
+- max_rating: Float (0.0-5.0)
+- availability: "available", "borrowed", "reserved", "all"
+- sort_by: "title", "author", "published_date", "rating", "popularity", "relevance"
+- sort_order: "asc", "desc"
+- page: Integer (1-based)
+- limit: Integer (1-100)
+- include_analytics: Boolean (include borrowing stats, trends)
+- member_preferences: Boolean (personalize based on member history)
+- borrowing_trends: Boolean (include trending books analysis)
+
+Example: /api/books/search?q=fantasy&category=fiction&min_rating=4.0&sort_by=popularity&include_analytics=true&page=1&limit=20</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q13">{
+  "books": [
+    {
+      "book_id": 201,
+      "title": "The Hobbit",
+      "author": "J.R.R. Tolkien",
+      "isbn": "978-0547928227",
+      "category": "Fantasy Fiction",
+      "published_date": "1937-09-21",
+      "rating": 4.5,
+      "is_available": true,
+      "borrowing_count": 156,
+      "popularity_score": 8.7,
+      "relevance_score": 0.95,
+      "similar_books": [202, 203, 204],
+      "member_rating": 4.3,
+      "borrowing_trend": "increasing",
+      "avg_borrowing_duration": 14.5,
+      "reservation_count": 3
+    }
+  ],
+  "pagination": {
+    "current_page": 1,
+    "total_pages": 5,
+    "total_results": 87,
+    "has_next": true,
+    "has_previous": false
+  },
+  "analytics": {
+    "search_time_ms": 45,
+    "filters_applied": ["category", "min_rating"],
+    "trending_categories": ["Fantasy", "Sci-Fi", "Mystery"],
+    "popular_authors": ["J.R.R. Tolkien", "George R.R. Martin"],
+    "availability_summary": {
+      "available": 45,
+      "borrowed": 32,
+      "reserved": 10
+    }
+  },
+  "suggestions": {
+    "related_searches": ["lord of the rings", "fantasy novels", "tolkien"],
+    "alternative_categories": ["Epic Fantasy", "Classic Literature"],
+    "recommended_books": [205, 206, 207]
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-400">400 Bad Request</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q13">{
+  "error": "invalid_query_parameters",
+  "message": "Invalid date range: published_after cannot be later than published_before",
+  "details": {
+    "invalid_params": ["published_after", "published_before"],
+    "suggested_corrections": {
+      "published_after": "2020-01-01",
+      "published_before": "2023-12-31"
+    }
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 14: Complex Book Reservation System with Priority Queue -->
+        <div class="problem-card" data-search="reservation system priority queue complex business logic">
+          <div class="problem-header">
+            <span class="problem-number">Q14</span>
+            <span class="method-badge method-post">POST</span>
+            <h2 class="problem-title">Complex Book Reservation System with Priority Queue</h2>
+          </div>
+          <p class="problem-description">Implement a sophisticated book reservation system that handles priority-based queuing, automatic notifications, dynamic pricing for premium reservations, conflict resolution for simultaneous requests, and integration with borrowing history. The system must calculate member priority scores based on borrowing frequency, return punctuality, membership tier, and special circumstances. Include support for group reservations, time-based priority adjustments, and automatic reservation expiration with cascading notifications to next-in-line members.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>POST /api/reservations</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/reservations', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Request Body
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="request-q14">{
+  "member_id": 1,
+  "book_id": 201,
+  "reservation_type": "standard|premium|group",
+  "preferred_pickup_date": "2025-09-20T10:00:00Z",
+  "max_wait_days": 14,
+  "notification_preferences": {
+    "email": true,
+    "sms": false,
+    "push": true
+  },
+  "group_reservation": {
+    "group_id": "GRP001",
+    "group_size": 5,
+    "coordinator_member_id": 1
+  },
+  "special_requests": {
+    "academic_priority": true,
+    "accessibility_needs": false,
+    "language_preference": "en"
+  },
+  "payment_info": {
+    "premium_fee": 5.00,
+    "payment_method": "credit_card",
+    "auto_renew": true
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q14">{
+  "reservation_id": "RES-2025-0911-001",
+  "member_id": 1,
+  "book_id": 201,
+  "book_title": "The Hobbit",
+  "reservation_status": "confirmed|pending|queued",
+  "queue_position": 3,
+  "estimated_availability_date": "2025-09-18T14:30:00Z",
+  "priority_score": 8.7,
+  "reservation_details": {
+    "created_at": "2025-09-11T10:30:00Z",
+    "expires_at": "2025-09-25T10:30:00Z",
+    "pickup_window_start": "2025-09-20T10:00:00Z",
+    "pickup_window_end": "2025-09-22T18:00:00Z",
+    "reservation_type": "premium",
+    "fee_paid": 5.00
+  },
+  "queue_analytics": {
+    "total_in_queue": 7,
+    "avg_wait_time_days": 5.2,
+    "queue_movement_rate": "moderate",
+    "cancellation_rate": 0.15
+  },
+  "member_priority_factors": {
+    "borrowing_frequency": 0.3,
+    "return_punctuality": 0.9,
+    "membership_tier": "gold",
+    "special_circumstances": ["academic_priority"],
+    "loyalty_score": 8.5
+  },
+  "notifications_scheduled": [
+    {
+      "type": "queue_position_update",
+      "scheduled_for": "2025-09-12T09:00:00Z"
+    },
+    {
+      "type": "availability_alert",
+      "scheduled_for": "2025-09-18T14:30:00Z"
+    }
+  ],
+  "conflict_resolution": {
+    "simultaneous_requests": 2,
+    "resolution_method": "priority_score",
+    "competing_members": [5, 8]
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-400">400 Bad Request</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q14">{
+  "error": "reservation_conflict",
+  "message": "Multiple complex validation failures detected",
+  "details": {
+    "validation_errors": [
+      {
+        "field": "member_id",
+        "error": "member_has_active_reservation",
+        "details": "Member already has 3 active reservations (limit: 2)"
+      },
+      {
+        "field": "book_id",
+        "error": "book_not_available_for_reservation",
+        "details": "Book is currently being processed for return"
+      },
+      {
+        "field": "preferred_pickup_date",
+        "error": "date_conflict",
+        "details": "Requested date conflicts with library closure"
+      }
+    ],
+    "suggested_alternatives": {
+      "alternative_books": [202, 203, 204],
+      "alternative_dates": ["2025-09-21T10:00:00Z", "2025-09-22T10:00:00Z"],
+      "upgrade_options": ["premium_reservation", "group_reservation"]
+    },
+    "queue_impact": {
+      "estimated_wait_time": "7-10 days",
+      "queue_position_if_accepted": 12
+    }
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Problem 15: Delete Book -->
+        <div class="problem-card" data-search="delete book delete api books">
+          <div class="problem-header">
+            <span class="problem-number">Q15</span>
+            <span class="method-badge method-delete">DELETE</span>
+            <h2 class="problem-title">Delete Book</h2>
+          </div>
+          <p class="problem-description">Remove a book from the library catalog with validation for active borrows.</p>
+          <div class="endpoint-section">
+            <div class="endpoint-url">
+              <code>DELETE /api/books/{book_id}</code>
+              <button class="copy-btn" onclick="copyToClipboard('/api/books/{book_id}', this)">Copy</button>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Success Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-200">200 OK</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="success-q15">{
+  "message": "book with id: 201 has been deleted successfully"
+}</pre>
+              </div>
+            </div>
+          </div>
+          <div class="collapsible-section">
+            <button class="collapsible-header" onclick="toggleCollapsible(this)">
+              Error Response
+              <span class="chevron">▼</span>
+            </button>
+            <div class="collapsible-content">
+              <span class="status-code status-400">400 Bad Request</span>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCodeBlock(this)">Copy</button>
+                <pre id="error-q15">{
+  "message": "cannot delete book with id: 101, book is currently borrowed"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const problemCards = document.querySelectorAll('.problem-card');
+            
+            problemCards.forEach(card => {
+                const searchData = card.getAttribute('data-search');
+                const title = card.querySelector('.problem-title').textContent.toLowerCase();
+                const description = card.querySelector('.problem-description').textContent.toLowerCase();
+                
+                if (searchData.includes(searchTerm) || title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Collapsible functionality
+        function toggleCollapsible(button) {
+            const content = button.nextElementSibling;
+            const chevron = button.querySelector('.chevron');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                chevron.classList.remove('rotated');
+            } else {
+                content.classList.add('active');
+                chevron.classList.add('rotated');
+            }
+        }
+
+        // Copy functionality
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function copyCodeBlock(button) {
+            const codeBlock = button.nextElementSibling;
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Apply JSON syntax highlighting
+        function highlightJSON() {
+            const codeBlocks = document.querySelectorAll('pre');
+            
+            codeBlocks.forEach(block => {
+                let content = block.innerHTML;
+                
+                // Highlight JSON keys
+                content = content.replace(/"([^"]+)":/g, '<span class="json-key">"$1"</span>:');
+                
+                // Highlight strings (but not keys)
+                content = content.replace(/:\s*"([^"]*)"/g, ': <span class="json-string">"$1"</span>');
+                
+                // Highlight numbers
+                content = content.replace(/:\s*(\d+)/g, ': <span class="json-number">$1</span>');
+                
+                // Highlight booleans
+                content = content.replace(/:\s*(true|false)/g, ': <span class="json-boolean">$1</span>');
+                
+                // Highlight null
+                content = content.replace(/:\s*(null)/g, ': <span class="json-null">$1</span>');
+                
+                block.innerHTML = content;
+            });
+        }
+
+        // Initialize syntax highlighting when page loads
+        document.addEventListener('DOMContentLoaded', highlightJSON);
+    </script>
+  </body>
+</html>
+HackTheAI-Mock-Preli-Problems.html
+Displaying HackTheAI-Mock-Preli-Problems.html.
